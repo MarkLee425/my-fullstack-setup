@@ -1,0 +1,11 @@
+{
+    "name": "ts-config",
+    "version": "0.0.0",
+    "private": true,
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "dmno": "^0.0.39"
+    }
+}

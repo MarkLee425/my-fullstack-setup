@@ -1,0 +1,23 @@
+{
+	"extends": "ts-config/server.json",
+	"compilerOptions": {
+		"lib": ["ESNext"],
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"skipLibCheck": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	},
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node"
+	},
+	"exclude": ["node_modules"],
+	"include": ["src"]
+}

@@ -1,0 +1,27 @@
+name: my-fullstack-setup
+
+services:
+  postgres:
+    image: postgres:17.5-alpine
+    container_name: my-fullstack-setup-postgres
+    env_file:
+      - ../../.dmno/.env.local
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      TZ: 'UTC'
+      PGTZ: 'UTC'
+    ports:
+      - '${DB_PORT}:5432'
+    volumes:
+      - my-fullstack-setup_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  my-fullstack-setup_postgres_data:
