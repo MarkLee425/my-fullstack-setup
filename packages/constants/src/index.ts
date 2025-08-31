@@ -1,8 +1,5 @@
 export const ID_LENGTH = 24;
-
-export const ROLES = ['admin', 'partner', 'user'] as const;
-export const GENDERS = ['male', 'female', 'other'] as const;
-export const NOTIFICATION_STATUS = ['read', 'unread'] as const;
+export const GENDERS = ["male", "female", "other"] as const;
 
 export enum HttpStatus {
 	OK = 200,
@@ -17,3 +14,5 @@ export enum HttpStatus {
 	INTERNAL_SERVER_ERROR = 500,
 	SERVICE_UNAVAILABLE = 503,
 }
+
+export * from "./password";

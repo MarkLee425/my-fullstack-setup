@@ -1,0 +1,33 @@
+export default {
+	APP_ENV: process.env.APP_ENV || "development",
+	PROTOCOL: process.env.PROTOCOL || "http",
+	HOST: process.env.HOST || "localhost",
+	CLIENT_PORT: Number.parseInt(process.env.CLIENT_PORT || "8016", 10),
+	SERVER_PORT: Number.parseInt(process.env.SERVER_PORT || "8015", 10),
+	SERVER_URL: process.env.SERVER_URL || "http://localhost:8015",
+	CLIENT_URL: process.env.CLIENT_URL || "http://localhost:8016",
+	BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "",
+	SESSION_PREFIX: process.env.SESSION_PREFIX || "",
+	DB_HOST: process.env.DB_HOST || "5432",
+	DB_PORT: Number.parseInt(process.env.DB_PORT || "5432", 10),
+	DB_USER: process.env.DB_USER || "",
+	DB_PASSWORD: process.env.DB_PASSWORD || "",
+	DB_DATABASE: process.env.DB_DATABASE || "",
+	DATABASE_URL: process.env.DATABASE_URL || "",
+
+	REDIS_APP_PORT: Number.parseInt(process.env.REDIS_APP_PORT || "6379", 10),
+	REDIS_APP_HOST: process.env.REDIS_APP_HOST || "localhost",
+
+	GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID || "",
+	GOOGLE_AUTH_CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET || "",
+	FACEBOOK_AUTH_CLIENT_ID: process.env.FACEBOOK_AUTH_CLIENT_ID || "",
+	FACEBOOK_AUTH_CLIENT_SECRET: process.env.FACEBOOK_AUTH_CLIENT_SECRET || "",
+	APPLE_AUTH_CLIENT_ID: process.env.APPLE_AUTH_CLIENT_ID || "",
+	APPLE_AUTH_TEAM_ID: process.env.APPLE_AUTH_TEAM_ID || "",
+	APPLE_AUTH_KEY_ID: process.env.APPLE_AUTH_KEY_ID || "",
+
+	EMAIL_HOST: process.env.EMAIL_HOST || "",
+	EMAIL_PORT: Number.parseInt(process.env.EMAIL_PORT || "587", 10),
+	EMAIL_AUTH_USER: process.env.EMAIL_AUTH_USER || "",
+	EMAIL_AUTH_PASS: process.env.EMAIL_AUTH_PASS || "",
+};

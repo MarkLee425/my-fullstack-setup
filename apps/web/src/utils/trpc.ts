@@ -22,7 +22,7 @@ export const queryClient = new QueryClient({
 const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchLink({
-			url: `${DMNO_PUBLIC_CONFIG.SERVER_URL}/trpc`,
+			url: `${process.env.NEXT_PUBLIC_SERVER_URL}/trpc`,
 			fetch(url, options) {
 				return fetch(url, {
 					...options,

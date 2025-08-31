@@ -1,6 +1,7 @@
-import { dmnoNextConfigPlugin } from "@dmno/nextjs-integration";
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+	typedRoutes: true,
+};
 
-export default dmnoNextConfigPlugin()(nextConfig);
+export default nextConfig;

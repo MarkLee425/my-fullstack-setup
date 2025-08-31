@@ -1,35 +1,31 @@
-import "dotenv/config";
-import fastifyCors, { type FastifyCorsOptions } from "@fastify/cors";
+import fastifyCors from "@fastify/cors";
 import {
 	type FastifyTRPCPluginOptions,
 	fastifyTRPCPlugin,
 } from "@trpc/server/adapters/fastify";
 import Fastify from "fastify";
 import { auth } from "./lib/auth";
+import config from "./lib/config";
 import { createContext } from "./lib/context";
 import { type AppRouter, appRouter } from "./routers/index";
-import { dmnoFastifyPlugin } from '@dmno/fastify-integration';
 
 const baseCorsConfig = {
-	origin: process.env.CLIENT_URL || "",
+	origin: [config.CLIENT_URL, "http://localhost:8081", "myfullstacksetup://"],
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 	credentials: true,
 	maxAge: 86400,
-} satisfies FastifyCorsOptions;
+};
 
 const fastify = Fastify({
 	logger: true,
 });
 
-fastify.register(dmnoFastifyPlugin, () => {
-	console.log("DMNO Fastify plugin registered");
-});
 fastify.register(fastifyCors, baseCorsConfig);
 
 fastify.route({
 	method: ["GET", "POST"],
-	url: "/api/auth/*",
+	url: "/auth/*",
 	async handler(request, reply) {
 		try {
 			const url = new URL(request.url, `http://${request.headers.host}`);
@@ -44,9 +40,7 @@ fastify.route({
 			});
 			const response = await auth.handler(req);
 			reply.status(response.status);
-			response.headers.forEach((value, key) => {
-				reply.header(key, value);
-			});
+			response.headers.forEach((value, key) => reply.header(key, value));
 			reply.send(response.body ? await response.text() : null);
 		} catch (error) {
 			fastify.log.error({ err: error }, "Authentication Error:");
@@ -73,10 +67,10 @@ fastify.get("/", async () => {
 	return "OK";
 });
 
-fastify.listen({ port: 8015 }, (err) => {
+fastify.listen({ port: config.SERVER_PORT }, (err) => {
 	if (err) {
 		fastify.log.error(err);
 		process.exit(1);
 	}
-	console.log("Server running on port 8015");
+	console.log(`Server running on port ${config.SERVER_PORT}`);
 });

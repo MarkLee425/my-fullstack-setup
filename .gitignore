@@ -7,6 +7,17 @@ dist/
 .turbo
 **/cache-key.json
 certs
+.expo/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+# expo router
+expo-env.d.ts
 
 
 
@@ -39,6 +50,8 @@ node_modules/
 !.env.example
 .dev.vars
 
+.cache
+
 # logs
 logs/
 *.log
@@ -58,3 +71,9 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+ios
+android

@@ -1,9 +1,9 @@
 {
-	"extends": "ts-config/server.json",
+	"extends": "@my-fullstack-setup/ts-config/server.json",
 	"compilerOptions": {
 		"lib": ["ESNext"],
 		"outDir": "./dist",
-		"rootDir": "./src",
+		"rootDir": "src",
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]

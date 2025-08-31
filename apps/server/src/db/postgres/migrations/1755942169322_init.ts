@@ -3,9 +3,6 @@ import {
 	type MigrationBuilder,
 	PgLiteral,
 } from "node-pg-migrate";
-import { HASH_LENGTH } from "@/utils/password";
-import { GENDERS, ROLES } from "@repo/constants";
-import { languages } from "@repo/constants/languages";
 
 export const shorthands: ColumnDefinitions | undefined = undefined;
 
@@ -20,9 +17,19 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 	pgm.createSchema("auth", { ifNotExists: true });
 	pgm.createSchema("payment", { ifNotExists: true });
 
-	pgm.createType("gender_enum", [...GENDERS]);
-	pgm.createType("role_enum", [...ROLES]);
-	pgm.createType("language_enum", [...languages]);
+	pgm.createType("gender_enum", ["male", "female", "other"]);
+
+	pgm.sql(`
+		CREATE OR REPLACE FUNCTION update_updated_at_column()
+		RETURNS TRIGGER AS $$
+		BEGIN
+			IF ROW(NEW.*) IS DISTINCT FROM ROW(OLD.*) THEN
+			NEW.updated_at = timezone('utc', NOW());
+			END IF;
+			RETURN NEW;
+		END;
+		$$ LANGUAGE plpgsql;
+	`);
 
 	pgm.createTable(
 		{ schema: "auth", name: "user" },
@@ -38,7 +45,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 				type: "email",
 				notNull: true,
 			},
-			email_verified: {
+			verified: {
 				type: "boolean",
 				default: false,
 			},
@@ -48,10 +55,6 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 			},
 			image: {
 				type: "text",
-			},
-			role: {
-				type: "role_enum",
-				default: "user",
 			},
 			stripe_customer_id: {
 				type: "text",
@@ -145,7 +148,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 				default: null,
 			},
 			password: {
-				type: `char(${HASH_LENGTH + 65})`,
+				type: `char(${32 + 65})`,
 			},
 			created_at: {
 				type: "timestamptz",
@@ -299,16 +302,13 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 		{ ifNotExists: true },
 	);
 
-	pgm.createIndex({ schema: "main", name: "user" }, "email", {
+	pgm.createIndex({ schema: "auth", name: "user" }, "email", {
 		ifNotExists: true,
 	});
-	pgm.createIndex({ schema: "main", name: "user" }, "role", {
+	pgm.createIndex({ schema: "auth", name: "account" }, "user_id", {
 		ifNotExists: true,
 	});
-	pgm.createIndex({ schema: "main", name: "account" }, "user_id", {
-		ifNotExists: true,
-	});
-	pgm.createIndex({ schema: "main", name: "verification" }, "identifier", {
+	pgm.createIndex({ schema: "auth", name: "verification" }, "identifier", {
 		ifNotExists: true,
 	});
 }
