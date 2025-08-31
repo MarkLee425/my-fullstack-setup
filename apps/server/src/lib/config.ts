@@ -1,33 +1,61 @@
-export default {
-	APP_ENV: process.env.APP_ENV || "development",
-	PROTOCOL: process.env.PROTOCOL || "http",
-	HOST: process.env.HOST || "localhost",
-	CLIENT_PORT: Number.parseInt(process.env.CLIENT_PORT || "8016", 10),
-	SERVER_PORT: Number.parseInt(process.env.SERVER_PORT || "8015", 10),
-	SERVER_URL: process.env.SERVER_URL || "http://localhost:8015",
-	CLIENT_URL: process.env.CLIENT_URL || "http://localhost:8016",
-	BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || "",
-	SESSION_PREFIX: process.env.SESSION_PREFIX || "",
-	DB_HOST: process.env.DB_HOST || "5432",
-	DB_PORT: Number.parseInt(process.env.DB_PORT || "5432", 10),
-	DB_USER: process.env.DB_USER || "",
-	DB_PASSWORD: process.env.DB_PASSWORD || "",
-	DB_DATABASE: process.env.DB_DATABASE || "",
-	DATABASE_URL: process.env.DATABASE_URL || "",
+import { z } from "zod";
 
-	REDIS_APP_PORT: Number.parseInt(process.env.REDIS_APP_PORT || "6379", 10),
-	REDIS_APP_HOST: process.env.REDIS_APP_HOST || "localhost",
+const portSchema = z
+	.string()
+	.default("0")
+	.transform((val) => parseInt(val, 10))
+	.refine((port) => port > 0 && port < 65536, "Invalid port number");
 
-	GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID || "",
-	GOOGLE_AUTH_CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET || "",
-	FACEBOOK_AUTH_CLIENT_ID: process.env.FACEBOOK_AUTH_CLIENT_ID || "",
-	FACEBOOK_AUTH_CLIENT_SECRET: process.env.FACEBOOK_AUTH_CLIENT_SECRET || "",
-	APPLE_AUTH_CLIENT_ID: process.env.APPLE_AUTH_CLIENT_ID || "",
-	APPLE_AUTH_TEAM_ID: process.env.APPLE_AUTH_TEAM_ID || "",
-	APPLE_AUTH_KEY_ID: process.env.APPLE_AUTH_KEY_ID || "",
+const envSchema = z.object({
+	APP_ENV: z.string().default("development"),
+	PROTOCOL: z.enum(["http", "https"]).default("http"),
+	HOST: z.string().default("localhost"),
 
-	EMAIL_HOST: process.env.EMAIL_HOST || "",
-	EMAIL_PORT: Number.parseInt(process.env.EMAIL_PORT || "587", 10),
-	EMAIL_AUTH_USER: process.env.EMAIL_AUTH_USER || "",
-	EMAIL_AUTH_PASS: process.env.EMAIL_AUTH_PASS || "",
-};
+	CLIENT_PORT: portSchema.default(8016),
+	SERVER_PORT: portSchema.default(8015),
+	NATIVE_PORT: portSchema.default(8081),
+
+	NATIVE_APP: z.string().default("myfullstacksetup"),
+	SERVER_URL: z.url().default("http://localhost:8015"),
+	CLIENT_URL: z.url().default("http://localhost:8016"),
+	NATIVE_WEB_URL: z.url().default("http://localhost:8081"),
+	NATIVE_APP_URL: z.string().default("myfullstacksetup://"),
+
+	AUTH_SECRET: z.string().default("auth-super-secret"),
+	SESSION_PREFIX: z.string().default("my-fullstack-setup"),
+	COOKIES_SIGNATURE: z.string().default(""),
+
+	AMQP_USER: z.string().default("root"),
+	AMQP_PASSWORD: z.string().default("password"),
+	AMQP_HOST: z.string().default("localhost"),
+	AMQP_PORT: portSchema.default(5672),
+	AMQP_DASHBOARD_PORT: portSchema.default(15672),
+
+	DB_HOST: z.string().default("localhost"),
+	DB_PORT: portSchema.default(5432),
+	DB_USER: z.string().default(""),
+	DB_PASSWORD: z.string().default(""),
+	DB_DATABASE: z.string().default(""),
+	DATABASE_URL: z.string().default(""),
+
+	REDIS_APP_PORT: portSchema.default(6379),
+	REDIS_APP_HOST: z.string().default("localhost"),
+
+	GOOGLE_AUTH_CLIENT_ID: z.string().default(""),
+	GOOGLE_AUTH_CLIENT_SECRET: z.string().default(""),
+	FACEBOOK_AUTH_CLIENT_ID: z.string().default(""),
+	FACEBOOK_AUTH_CLIENT_SECRET: z.string().default(""),
+	APPLE_AUTH_CLIENT_ID: z.string().default(""),
+	APPLE_AUTH_TEAM_ID: z.string().default(""),
+	APPLE_AUTH_KEY_ID: z.string().default(""),
+
+	EMAIL_HOST: z.string().default(""),
+	EMAIL_PORT: portSchema.default(587),
+	EMAIL_AUTH_USER: z.string().default(""),
+	EMAIL_AUTH_PASS: z.string().default(""),
+});
+
+export type Env = z.infer<typeof envSchema>;
+const config: Env = envSchema.parse(process.env);
+
+export default config;

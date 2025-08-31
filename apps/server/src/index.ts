@@ -1,4 +1,3 @@
-import fastifyCors from "@fastify/cors";
 import {
 	type FastifyTRPCPluginOptions,
 	fastifyTRPCPlugin,
@@ -10,18 +9,60 @@ import { createContext } from "./lib/context";
 import { type AppRouter, appRouter } from "./routers/index";
 
 const baseCorsConfig = {
-	origin: [config.CLIENT_URL, "http://localhost:8081", "myfullstacksetup://"],
-	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	origin: [config.CLIENT_URL, config.NATIVE_WEB_URL, config.NATIVE_APP_URL],
+	methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 	credentials: true,
 	maxAge: 86400,
 };
 
 const fastify = Fastify({
-	logger: true,
+	logger: {
+		level: config.APP_ENV === "production" ? "info" : "debug",
+		transport:
+			(config.APP_ENV === "development" && {
+				target: "pino-pretty",
+				options: {
+					translateTime: "HH:MM:ss Z",
+					ignore: "pid,hostname",
+				},
+			}) ||
+			undefined,
+	},
 });
 
-fastify.register(fastifyCors, baseCorsConfig);
+await fastify.register(import("@fastify/helmet"), {
+	contentSecurityPolicy:
+		config.APP_ENV === "production"
+			? {
+					directives: {
+						defaultSrc: ["'self'"],
+						scriptSrc: ["'self'", "'unsafe-inline'", "trusted.cdn.example.com"],
+						styleSrc: ["'self'", "'unsafe-inline'"],
+						imgSrc: ["'self'", "data:", "cdn.example.com"],
+					},
+				}
+			: false,
+	crossOriginResourcePolicy: false,
+	dnsPrefetchControl: false,
+	hsts:
+		config.PROTOCOL === "https"
+			? { maxAge: 180 * 24 * 60 * 60, includeSubDomains: false, preload: false }
+			: false,
+});
+
+// Compression
+await fastify.register(import("@fastify/compress"), {
+	global: true,
+});
+
+// Cookies
+await fastify.register(import("@fastify/cookie"), {
+	secret: config.COOKIES_SIGNATURE, // for signed cookies
+	parseOptions: {},
+});
+
+await fastify.register(import("@fastify/cors"), baseCorsConfig);
 
 fastify.route({
 	method: ["GET", "POST"],

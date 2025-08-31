@@ -19,9 +19,12 @@ export const auth = betterAuth({
 	database: pool,
 	trustedOrigins: [
 		config.CLIENT_URL,
-		"http://localhost:8081",
-		"myfullstacksetup://*",
+		config.NATIVE_WEB_URL,
+		config.NATIVE_APP_URL,
 	],
+	telemetry: {
+		enabled: false, // Disable telemetry for security reasons
+	},
 	rateLimit: {
 		storage: "secondary-storage",
 		modelName: "rateLimit",
