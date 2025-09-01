@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "tsc --watch",
-		"build": "tsdown"
+		"build": "tsdown",
+		"clean": "rimraf dist .turbo node_modules"
 	},
 	"exports": {
 		".": {

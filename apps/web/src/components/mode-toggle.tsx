@@ -1,15 +1,15 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@my-fullstack-setup/ui/components/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@my-fullstack-setup/ui/components/dropdown-menu";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import * as React from "react";
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();

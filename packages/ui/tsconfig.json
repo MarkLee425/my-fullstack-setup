@@ -1,0 +1,11 @@
+{
+	"extends": "@my-fullstack-setup/ts-config/react-library.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@my-fullstack-setup/ui/*": ["./src/*"]
+		}
+	},
+	"include": ["."],
+	"exclude": ["node_modules", "dist"]
+}

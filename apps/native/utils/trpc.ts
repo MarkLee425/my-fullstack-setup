@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
+import superjson from "superjson";
 import { authClient } from "@/lib/auth-client";
 import type { AppRouter } from "../../server/src/routers";
 
@@ -10,6 +11,7 @@ const trpcClient = createTRPCClient<AppRouter>({
 	links: [
 		httpBatchLink({
 			url: `${process.env.EXPO_PUBLIC_SERVER_URL}/trpc`,
+			transformer: superjson,
 			headers() {
 				const headers = new Map<string, string>();
 				const cookies = authClient.getCookie();

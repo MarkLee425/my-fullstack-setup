@@ -1,12 +1,12 @@
+import { Button } from "@my-fullstack-setup/ui/components/button";
+import { Input } from "@my-fullstack-setup/ui/components/input";
+import { Label } from "@my-fullstack-setup/ui/components/label";
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
 import Loader from "./loader";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
 export default function SignUpForm({
 	onSwitchToSignIn,

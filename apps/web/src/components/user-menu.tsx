@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Button } from "@my-fullstack-setup/ui/components/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -7,10 +6,11 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@my-fullstack-setup/ui/components/dropdown-menu";
+import { Skeleton } from "@my-fullstack-setup/ui/components/skeleton";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
 
 export default function UserMenu() {
 	const router = useRouter();

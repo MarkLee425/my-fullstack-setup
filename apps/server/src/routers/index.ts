@@ -1,9 +1,14 @@
+import z from "zod";
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
 
 export const appRouter = router({
-	healthCheck: publicProcedure.query(() => {
-		return "OK";
-	}),
+	healthCheck: publicProcedure
+		.meta({ openapi: { method: "GET", path: "/health" } })
+		.input(z.void())
+		.output(z.string())
+		.query(() => {
+			return "OK";
+		}),
 	privateData: protectedProcedure.query(({ ctx }) => {
 		return {
 			message: "This is private",
@@ -11,4 +16,5 @@ export const appRouter = router({
 		};
 	}),
 });
+
 export type AppRouter = typeof appRouter;
