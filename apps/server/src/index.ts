@@ -65,11 +65,6 @@ async function main() {
 				: false,
 	});
 
-	// Compression
-	await fastify.register(await import("@fastify/compress"), {
-		global: true,
-	});
-
 	// Cookies
 	await fastify.register(await import("@fastify/cookie"), {
 		secret: config.COOKIES_SIGNATURE, // for signed cookies
