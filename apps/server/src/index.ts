@@ -106,12 +106,12 @@ async function main() {
 
 	await fastify.register(fastifyTRPCPlugin, {
 		prefix: "/trpc",
-		useWSS: true,
-		keepAlive: {
-			enabled: true,
-			pingMs: 30000,
-			pongWaitMs: 5000,
-		},
+		// useWSS: true,
+		// keepAlive: {
+		// 	enabled: true,
+		// 	pingMs: 30000,
+		// 	pongWaitMs: 5000,
+		// },
 		trpcOptions: {
 			router: appRouter,
 			createContext,

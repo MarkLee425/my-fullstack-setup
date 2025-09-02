@@ -1,4 +1,3 @@
-"use client";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
 
@@ -22,7 +21,7 @@ export default function Home() {
 	const healthCheck = useQuery(trpc.healthCheck.queryOptions());
 
 	return (
-		<div className="container mx-auto max-w-3xl px-4 py-2">
+		<div className="container mx-auto max-w-3xl px-4 py-2 bg-white">
 			<pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
 			<div className="grid gap-6">
 				<section className="rounded-lg border p-4">
