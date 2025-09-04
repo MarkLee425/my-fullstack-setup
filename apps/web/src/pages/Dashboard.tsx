@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 import { authClient } from "@/lib/auth-client";
 import { trpc } from "@/utils/trpc";
 
 export default function Dashboard() {
-	const router = useRouter();
+	const navigate = useNavigate();
 	const { data: session, isPending } = authClient.useSession();
 
 	const privateData = useQuery(trpc.privateData.queryOptions());
 
 	useEffect(() => {
 		if (!session && !isPending) {
-			router.push("/login");
+			navigate("/login");
 		}
 	}, [session, isPending]);
 

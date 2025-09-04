@@ -25,12 +25,6 @@ const envSchema = z.object({
 	SESSION_PREFIX: z.string().default("my-fullstack-setup"),
 	COOKIES_SIGNATURE: z.string().default(""),
 
-	AMQP_USER: z.string().default("root"),
-	AMQP_PASSWORD: z.string().default("password"),
-	AMQP_HOST: z.string().default("localhost"),
-	AMQP_PORT: portSchema.default(5672),
-	AMQP_DASHBOARD_PORT: portSchema.default(15672),
-
 	DB_HOST: z.string().default("localhost"),
 	DB_PORT: portSchema.default(5432),
 	DB_USER: z.string().default(""),

@@ -1,7 +1,7 @@
 {
 	"name": "my-fullstack-setup",
 	"private": true,
-	"packageManager": "pnpm@10.14.0",
+	"packageManager": "pnpm@10.15.1",
 	"scripts": {
 		"check": "biome check --write .",
 		"prepare": "husky",
@@ -30,7 +30,7 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^16.1.2",
 		"rimraf": "^6.0.1",
-		"turbo": "^2.5.4"
+		"turbo": "^2.5.6"
 	},
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [

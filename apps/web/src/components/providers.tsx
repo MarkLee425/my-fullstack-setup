@@ -1,5 +1,3 @@
-"use client";
-
 import { Toaster } from "@my-fullstack-setup/ui/components/sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

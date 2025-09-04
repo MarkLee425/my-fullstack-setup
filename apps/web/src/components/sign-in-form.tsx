@@ -2,7 +2,7 @@ import { Button } from "@my-fullstack-setup/ui/components/button";
 import { Input } from "@my-fullstack-setup/ui/components/input";
 import { Label } from "@my-fullstack-setup/ui/components/label";
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
@@ -13,7 +13,7 @@ export default function SignInForm({
 }: {
 	onSwitchToSignUp: () => void;
 }) {
-	const router = useRouter();
+	const navigate = useNavigate();
 	const { isPending } = authClient.useSession();
 
 	const form = useForm({
@@ -29,7 +29,7 @@ export default function SignInForm({
 				},
 				{
 					onSuccess: () => {
-						router.push("/dashboard");
+						navigate("/dashboard");
 						toast.success("Sign in successful");
 					},
 					onError: (error) => {

@@ -1,3 +1,4 @@
+import IORedis from "ioredis";
 import { createClient, SocketTimeoutError } from "redis";
 import config from "./config";
 
@@ -38,7 +39,7 @@ export async function startRedis(): Promise<void> {
 		client: ReturnType<typeof createClient>,
 		name: string,
 	) => {
-		client.on("connect", () => console.log(`${name} connected to Redis`));
+		console.log(`${name} connected to Redis`);
 		client.on("error", (err) => console.error(`${name} Redis error:`, err));
 		client.on("reconnecting", () =>
 			console.log(`${name} reconnecting to Redis...`),
@@ -51,6 +52,7 @@ export async function startRedis(): Promise<void> {
 	try {
 		await privateRedisClient.connect();
 		await privateSubscriberClient.connect();
+		getBullMQIORedis();
 		console.log("✅ Redis clients connected successfully");
 		redisClient = privateRedisClient;
 		subscriberClient = privateSubscriberClient;
@@ -66,17 +68,58 @@ export let subscriberClient: ReturnType<typeof createClient> =
 	privateSubscriberClient!;
 
 export async function stopRedis(): Promise<void> {
-	if (!privateRedisClient || !privateSubscriberClient) {
+	if (!privateRedisClient && !privateSubscriberClient) {
 		console.log("Redis clients not initialized, nothing to stop.");
 		return;
 	}
 
 	try {
-		await privateRedisClient.quit();
-		await privateSubscriberClient.quit();
+		if (privateRedisClient?.isOpen) {
+			await privateRedisClient.quit();
+			console.log("✅ privateRedisClient disconnected");
+		} else {
+			console.log("ℹ️ privateRedisClient already closed");
+		}
+
+		if (privateSubscriberClient?.isOpen) {
+			await privateSubscriberClient.quit();
+			console.log("✅ privateSubscriberClient disconnected");
+		} else {
+			console.log("ℹ️ privateSubscriberClient already closed");
+		}
+
+		await closeBullMQIORedis?.();
 		console.log("✅ Redis clients disconnected successfully");
 	} catch (err) {
 		console.error("❌ Failed to disconnect Redis clients:", err);
 		throw err;
+	}
+}
+
+let bullIORedis: IORedis | null = null;
+
+export function getBullMQIORedis(): IORedis {
+	if (!bullIORedis) {
+		bullIORedis = new IORedis({
+			host: config.REDIS_APP_HOST,
+			port: config.REDIS_APP_PORT,
+			connectTimeout: 5000,
+			lazyConnect: false,
+			maxRetriesPerRequest: null,
+		});
+
+		bullIORedis.on("connect", () => console.log("BullMQ ioredis connected"));
+		bullIORedis.on("error", (err) =>
+			console.error("BullMQ ioredis error:", err),
+		);
+	}
+	return bullIORedis;
+}
+
+export async function closeBullMQIORedis(): Promise<void> {
+	if (bullIORedis) {
+		await bullIORedis.quit();
+		bullIORedis = null;
+		console.log("BullMQ ioredis closed");
 	}
 }

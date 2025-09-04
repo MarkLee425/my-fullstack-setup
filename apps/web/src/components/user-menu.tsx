@@ -8,12 +8,11 @@ import {
 	DropdownMenuTrigger,
 } from "@my-fullstack-setup/ui/components/dropdown-menu";
 import { Skeleton } from "@my-fullstack-setup/ui/components/skeleton";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router";
 import { authClient } from "@/lib/auth-client";
 
 export default function UserMenu() {
-	const router = useRouter();
+	const navigate = useNavigate();
 	const { data: session, isPending } = authClient.useSession();
 
 	if (isPending) {
@@ -23,7 +22,7 @@ export default function UserMenu() {
 	if (!session) {
 		return (
 			<Button variant="outline" asChild>
-				<Link href="/login">Sign In</Link>
+				<Link to="/login">Sign In</Link>
 			</Button>
 		);
 	}
@@ -45,7 +44,7 @@ export default function UserMenu() {
 							authClient.signOut({
 								fetchOptions: {
 									onSuccess: () => {
-										router.push("/");
+										navigate("/");
 									},
 								},
 							});

@@ -23,7 +23,8 @@
 			"!**/.wrangler",
 			"!**/.alchemy",
 			"!**/wrangler.jsonc",
-			"!**/.source"
+			"!**/.source",
+			"!**/storybook-static"
 		]
 	},
 	"formatter": {

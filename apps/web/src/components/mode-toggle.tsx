@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@my-fullstack-setup/ui/components/button";
 import {
 	DropdownMenu,
@@ -9,7 +7,6 @@ import {
 } from "@my-fullstack-setup/ui/components/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import * as React from "react";
 
 export function ModeToggle() {
 	const { setTheme } = useTheme();

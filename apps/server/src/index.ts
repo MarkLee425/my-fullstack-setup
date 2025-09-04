@@ -7,6 +7,7 @@ import { fastifyTRPCOpenApiPlugin } from "trpc-to-openapi";
 import { auth } from "./lib/auth";
 import config from "./lib/config";
 import { createContext } from "./lib/context";
+import { startRedis, stopRedis } from "./lib/redis";
 import { type AppRouter, appRouter } from "./routers";
 
 const trpcCorsOptions = {
@@ -21,23 +22,53 @@ const fastify = Fastify({
 	logger: {
 		level: config.APP_ENV === "production" ? "info" : "debug",
 		transport:
-			(config.APP_ENV === "development" && {
-				target: "pino-pretty",
-				options: {
-					translateTime: "HH:MM:ss Z",
-					ignore: "pid,hostname",
-				},
-			}) ||
-			undefined,
+			config.APP_ENV === "development"
+				? {
+						target: "pino-pretty",
+						options: {
+							translateTime: "HH:MM:ss Z",
+							ignore: "pid,hostname",
+						},
+					}
+				: undefined,
+		formatters: {
+			bindings: (bindings) => {
+				return {
+					pid: bindings.pid,
+					host: bindings.hostname,
+					node_version: process.version,
+				};
+			},
+			level: (label) => {
+				return { level: label.toUpperCase() };
+			},
+		},
 	},
-	genReqId: () => {
-		return crypto.randomUUID();
-	},
+	genReqId: () => crypto.randomUUID(),
 	trustProxy: 1,
 });
 
-async function main() {
-	await fastify.register(await import("@fastify/helmet"), {
+// ✅ log like your Morgan setup
+fastify.addHook("onResponse", (req, reply, done) => {
+	const logData = {
+		requestId: req.id,
+		userAgent: req.headers["user-agent"],
+		ip: req.headers["x-forwarded-for"] || req.socket.remoteAddress,
+		method: req.method,
+		url: req.url,
+		status: reply.statusCode,
+		content_length: reply.getHeader("content-length"),
+	};
+
+	req.log.info({ ...logData }, "incoming-request");
+	done();
+});
+
+async function buildServer() {
+	await startRedis();
+
+	// Security headers
+	await fastify.register(import("@fastify/helmet"), {
 		contentSecurityPolicy:
 			config.APP_ENV === "production"
 				? {
@@ -66,15 +97,15 @@ async function main() {
 	});
 
 	// Cookies
-	await fastify.register(await import("@fastify/cookie"), {
-		secret: config.COOKIES_SIGNATURE, // for signed cookies
+	await fastify.register(import("@fastify/cookie"), {
+		secret: config.COOKIES_SIGNATURE,
 		parseOptions: {},
 	});
 
-	await fastify.register(await import("@fastify/websocket"));
+	await fastify.register(import("@fastify/websocket"));
+	await fastify.register(import("@fastify/cors"), trpcCorsOptions);
 
-	await fastify.register(await import("@fastify/cors"), trpcCorsOptions);
-
+	// Auth passthrough
 	fastify.route({
 		method: ["GET", "POST"],
 		url: "/auth/*",
@@ -104,36 +135,62 @@ async function main() {
 		},
 	});
 
+	// tRPC
 	await fastify.register(fastifyTRPCPlugin, {
 		prefix: "/trpc",
-		// useWSS: true,
-		// keepAlive: {
-		// 	enabled: true,
-		// 	pingMs: 30000,
-		// 	pongWaitMs: 5000,
-		// },
 		trpcOptions: {
 			router: appRouter,
 			createContext,
 			onError({ path, error }) {
-				console.error(`Error in tRPC handler on path '${path}':`, error);
+				fastify.log.error({ path, err: error }, "tRPC Handler Error");
 			},
 		} satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
 	});
 
+	// OpenAPI
 	await fastify.register(fastifyTRPCOpenApiPlugin, { router: appRouter });
 
-	fastify.get("/", async () => {
-		return "OK";
+	// Health check
+	fastify.get("/", async () => "OK");
+
+	return fastify;
+}
+
+async function main() {
+	const app = await buildServer();
+
+	process.on("unhandledRejection", (reason, promise) => {
+		app.log.error({ err: reason, promise }, "Unhandled Rejection");
+	});
+	process.on("uncaughtException", (err) => {
+		app.log.error({ err }, "Uncaught Exception");
+		process.exit(1);
 	});
 
-	fastify.listen({ port: config.SERVER_PORT }, (err) => {
-		if (err) {
-			fastify.log.error(err);
+	// Graceful shutdown
+	const shutdown = async (signal: string) => {
+		app.log.info(`Received shutdown signal: ${signal}`);
+		try {
+			await stopRedis();
+			await app.close();
+			app.log.info("✅ Server shutdown complete");
+			process.exit(0);
+		} catch (err) {
+			app.log.error({ err }, "❌ Error during shutdown");
 			process.exit(1);
 		}
-		console.log(`Server running on port ${config.SERVER_PORT}`);
-	});
+	};
+
+	process.on("SIGINT", () => shutdown("SIGINT"));
+	process.on("SIGTERM", () => shutdown("SIGTERM"));
+
+	try {
+		await app.listen({ port: config.SERVER_PORT, host: config.HOST });
+		app.log.info(`🚀 Server running on port ${config.SERVER_PORT}`);
+	} catch (err) {
+		app.log.error({ err }, "Failed to start server");
+		process.exit(1);
+	}
 }
 
 main();

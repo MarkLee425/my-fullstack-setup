@@ -18,7 +18,6 @@ services:
     depends_on:
       - db
       - redis
-      - rabbitmq
     networks:
       - internal-network
   db:
@@ -64,27 +63,6 @@ services:
     networks:
       - internal-network
 
-  rabbitmq:
-    image: rabbitmq:4.1.3-management-alpine
-    container_name: my-fullstack-setup-rabbitmq
-    restart: always
-    ports:
-      - '${AMQP_PORT}:5672'
-      - '${AMQP_DASHBOARD_PORT}:15672'
-    environment:
-      RABBITMQ_DEFAULT_USER: ${AMQP_USER}
-      RABBITMQ_DEFAULT_PASS: ${AMQP_PASSWORD}
-    volumes:
-      - my-fullstack-setup_rabbitmq_data:/var/lib/rabbitmq
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - internal-network
-
 volumes:
   my-fullstack-setup_postgres_data:
   my-fullstack-setup_redis_data:
-  my-fullstack-setup_rabbitmq_data:
