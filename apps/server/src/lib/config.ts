@@ -47,6 +47,12 @@ const envSchema = z.object({
 	EMAIL_PORT: portSchema.default(587),
 	EMAIL_AUTH_USER: z.string().default(""),
 	EMAIL_AUTH_PASS: z.string().default(""),
+
+	S3_ACCOUNT_ID: z.string().default(""),
+	S3_ENDPOINT: z.string().default(""),
+	S3_ACCESS_KEY_ID: z.string().default(""),
+	S3_SECRET_ACCESS_KEY: z.string().default(""),
+	S3_BUCKET_NAME: z.string().default(""),
 });
 
 export type Env = z.infer<typeof envSchema>;

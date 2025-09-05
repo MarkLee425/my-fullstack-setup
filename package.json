@@ -13,7 +13,6 @@
 		"dev:native": "turbo -F native dev",
 		"dev:web": "turbo -F web dev",
 		"dev:server": "turbo -F server dev",
-		"db:push": "turbo -F server db:push",
 		"db:migrate:": "turbo -F server db:migrate:",
 		"db:migrate:up": "turbo -F server db:migrate:up",
 		"db:migrate:down": "turbo -F server db:migrate:down",

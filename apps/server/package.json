@@ -20,12 +20,14 @@
 		"setup": "pnpm run db:down && pnpm run redis:down && pnpm run db:up && pnpm run redis:up && pnpm run db:migrate:up"
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.883.0",
 		"@better-auth/expo": "^1.3.7",
 		"@dotenvx/dotenvx": "^1.49.0",
 		"@fastify/compress": "^8.1.0",
 		"@fastify/cookie": "^11.0.2",
 		"@fastify/cors": "^11.0.1",
 		"@fastify/helmet": "^13.0.1",
+		"@fastify/multipart": "^9.2.1",
 		"@fastify/rate-limit": "^10.3.0",
 		"@fastify/websocket": "^11.2.0",
 		"@my-fullstack-setup/constants": "workspace:*",

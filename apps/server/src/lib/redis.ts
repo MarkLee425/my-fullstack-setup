@@ -108,9 +108,9 @@ export function getBullMQIORedis(): IORedis {
 			maxRetriesPerRequest: null,
 		});
 
-		bullIORedis.on("connect", () => console.log("BullMQ ioredis connected"));
+		bullIORedis.on("connect", () => console.log("✅ BullMQ ioredis connected"));
 		bullIORedis.on("error", (err) =>
-			console.error("BullMQ ioredis error:", err),
+			console.error("❌ BullMQ ioredis error:", err),
 		);
 	}
 	return bullIORedis;
@@ -120,6 +120,8 @@ export async function closeBullMQIORedis(): Promise<void> {
 	if (bullIORedis) {
 		await bullIORedis.quit();
 		bullIORedis = null;
-		console.log("BullMQ ioredis closed");
+		console.log("✅ BullMQ ioredis closed");
+	} else {
+		console.log("ℹ️ BullMQ ioredis already closed");
 	}
 }

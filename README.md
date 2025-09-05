@@ -6,23 +6,23 @@ A modern, monorepo fullstack application setup with TypeScript, React, React Nat
 
 This project is structured as a monorepo with the following components:
 
-- **Web**: Next.js 15 application (port 8016)
-- **Native**: Expo (React Native) application for iOS and Android
+- **Web**: React 19 application with Vite, React Router v7, and Tailwind CSS
+- **Native**: Expo (React Native) application for iOS and Android with NativeWind
 - **Server**: Fastify backend with PostgreSQL and Redis
 - **Packages**: Shared constants and UI components
 
 ### Tech Stack
 
-| Layer    | Technology         | Purpose                   |
-|----------|--------------------|---------------------------|
-| Frontend | React 19, Next.js 15 | Web application           |
-| Mobile   | React Native, Expo | Native mobile application |
-| Backend  | Fastify            | API server                |
-| Database | PostgreSQL         | Primary database          |
-| Cache    | Redis              | Caching and sessions      |
-| Auth     | Better Auth        | Authentication system     |
-| API      | tRPC               | Type-safe API endpoints   |
-| Styling  | Tailwind CSS       | Utility-first CSS         |
+| Layer    | Technology               | Purpose                          |
+|----------|--------------------------|----------------------------------|
+| Frontend | React 19 (Vite, Router 7)| Web application with routing     |
+| Mobile   | React Native, Expo       | Native mobile application        |
+| Backend  | Fastify                  | API server                       |
+| Database | PostgreSQL               | Primary database                 |
+| Cache    | Redis                    | Caching and sessions             |
+| Auth     | Better Auth              | Authentication system            |
+| API      | tRPC                     | Type-safe API endpoints          |
+| Styling  | Tailwind CSS             | Utility-first CSS                |
 
 ## Getting Started
 
@@ -47,8 +47,8 @@ pnpm install
 
 3. Set up environment variables:
 ```bash
-# Copy the example env file
-cp .env.docker.example .env.docker
+# Copy the example env file from the server directory
+cp apps/server/.env.example .env.docker
 # Edit with your values
 ```
 
@@ -95,11 +95,11 @@ my-fullstack-setup/
 ├── apps/
 │   ├── native/       # Expo React Native app
 │   ├── server/       # Fastify backend server
-│   └── web/          # Next.js web application
+│   └── web/          # React + Vite web application
 ├── packages/
 │   ├── constants/    # Shared constants and types
 │   └── ui/           # Shared UI components
-├── .env.docker       # Docker environment configuration
+├── .env.docker       # Docker environment configuration (copied from apps/server/.env.example)
 └── turbo.json        # Turborepo configuration
 ```
 
@@ -128,7 +128,7 @@ my-fullstack-setup/
 
 | Script              | Description                     |
 |---------------------|---------------------------------|
-| `pnpm run dev:web`  | Start Next.js development server|
+| `pnpm run dev:web`  | Start Vite development server   |
 
 ### Native Scripts
 
@@ -197,198 +197,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [Fastify](https://www.fastify.io/) for the backend framework
 - [Better Auth](https://www.better-auth.com/) for authentication
 - [tRPC](https://trpc.io/) for type-safe APIs
-```
-my-fullstack-setup
-├─ .husky
-│  ├─ _
-│  │  ├─ applypatch-msg
-│  │  ├─ commit-msg
-│  │  ├─ h
-│  │  ├─ husky.sh
-│  │  ├─ post-applypatch
-│  │  ├─ post-checkout
-│  │  ├─ post-commit
-│  │  ├─ post-merge
-│  │  ├─ post-rewrite
-│  │  ├─ pre-applypatch
-│  │  ├─ pre-auto-gc
-│  │  ├─ pre-commit
-│  │  ├─ pre-merge-commit
-│  │  ├─ pre-push
-│  │  ├─ pre-rebase
-│  │  └─ prepare-commit-msg
-│  └─ pre-commit
-├─ .npmrc
-├─ LICENSE
-├─ README.md
-├─ apps
-│  ├─ client
-│  │  ├─ .dockerignore
-│  │  ├─ .react-router
-│  │  │  └─ types
-│  │  │     ├─ +future.ts
-│  │  │     ├─ +routes.ts
-│  │  │     ├─ +server-build.d.ts
-│  │  │     └─ app
-│  │  │        ├─ +types
-│  │  │        │  └─ root.ts
-│  │  │        └─ routes
-│  │  │           └─ +types
-│  │  │              └─ home.ts
-│  │  ├─ Dockerfile
-│  │  ├─ README.md
-│  │  ├─ app
-│  │  │  ├─ app.css
-│  │  │  ├─ root.tsx
-│  │  │  ├─ routes
-│  │  │  │  └─ home.tsx
-│  │  │  ├─ routes.ts
-│  │  │  └─ welcome
-│  │  │     ├─ logo-dark.svg
-│  │  │     ├─ logo-light.svg
-│  │  │     └─ welcome.tsx
-│  │  ├─ package.json
-│  │  ├─ public
-│  │  │  └─ favicon.ico
-│  │  ├─ react-router.config.ts
-│  │  ├─ tsconfig.json
-│  │  └─ vite.config.ts
-│  ├─ native
-│  │  ├─ app
-│  │  │  ├─ (drawer)
-│  │  │  │  ├─ (tabs)
-│  │  │  │  │  ├─ _layout.tsx
-│  │  │  │  │  ├─ index.tsx
-│  │  │  │  │  └─ two.tsx
-│  │  │  │  ├─ _layout.tsx
-│  │  │  │  └─ index.tsx
-│  │  │  ├─ +html.tsx
-│  │  │  ├─ +not-found.tsx
-│  │  │  ├─ _layout.tsx
-│  │  │  └─ modal.tsx
-│  │  ├─ app-env.d.ts
-│  │  ├─ app.json
-│  │  ├─ assets
-│  │  │  ├─ adaptive-icon.png
-│  │  │  ├─ favicon.png
-│  │  │  ├─ icon.png
-│  │  │  └─ splash.png
-│  │  ├─ babel.config.js
-│  │  ├─ components
-│  │  │  ├─ container.tsx
-│  │  │  ├─ header-button.tsx
-│  │  │  ├─ sign-in.tsx
-│  │  │  ├─ sign-up.tsx
-│  │  │  └─ tabbar-icon.tsx
-│  │  ├─ global.css
-│  │  ├─ lib
-│  │  │  ├─ auth-client.ts
-│  │  │  ├─ constants.ts
-│  │  │  └─ use-color-scheme.ts
-│  │  ├─ metro.config.js
-│  │  ├─ nativewind-env.d.ts
-│  │  ├─ package.json
-│  │  ├─ tailwind.config.js
-│  │  ├─ tsconfig.json
-│  │  └─ utils
-│  │     └─ trpc.ts
-│  ├─ server
-│  │  ├─ Dockerfile
-│  │  ├─ docker-compose-dev.yml
-│  │  ├─ docker-compose-prod.yml
-│  │  ├─ package.json
-│  │  ├─ src
-│  │  │  ├─ db
-│  │  │  │  └─ postgres
-│  │  │  │     └─ migrations
-│  │  │  │        └─ 1755942169322_init.ts
-│  │  │  ├─ helpers
-│  │  │  │  └─ image.ts
-│  │  │  ├─ index.ts
-│  │  │  ├─ lib
-│  │  │  │  ├─ auth.ts
-│  │  │  │  ├─ config.ts
-│  │  │  │  ├─ context.ts
-│  │  │  │  ├─ db.ts
-│  │  │  │  ├─ queue.ts
-│  │  │  │  ├─ redis.ts
-│  │  │  │  └─ trpc.ts
-│  │  │  ├─ routers
-│  │  │  │  └─ index.ts
-│  │  │  ├─ services
-│  │  │  │  └─ email.ts
-│  │  │  └─ utils
-│  │  │     ├─ date-time.ts
-│  │  │     └─ password.ts
-│  │  └─ tsconfig.json
-│  └─ web
-│     ├─ components.json
-│     ├─ next.config.ts
-│     ├─ package.json
-│     ├─ postcss.config.mjs
-│     ├─ src
-│     │  ├─ app
-│     │  │  ├─ dashboard
-│     │  │  │  └─ page.tsx
-│     │  │  ├─ favicon.ico
-│     │  │  ├─ layout.tsx
-│     │  │  ├─ login
-│     │  │  │  └─ page.tsx
-│     │  │  └─ page.tsx
-│     │  ├─ components
-│     │  │  ├─ header.tsx
-│     │  │  ├─ loader.tsx
-│     │  │  ├─ mode-toggle.tsx
-│     │  │  ├─ providers.tsx
-│     │  │  ├─ sign-in-form.tsx
-│     │  │  ├─ sign-up-form.tsx
-│     │  │  ├─ theme-provider.tsx
-│     │  │  └─ user-menu.tsx
-│     │  ├─ index.css
-│     │  ├─ lib
-│     │  │  └─ auth-client.ts
-│     │  └─ utils
-│     │     └─ trpc.ts
-│     └─ tsconfig.json
-├─ biome.json
-├─ package.json
-├─ packages
-│  ├─ constants
-│  │  ├─ package.json
-│  │  ├─ src
-│  │  │  ├─ index.ts
-│  │  │  └─ password.ts
-│  │  ├─ tsconfig.build.json
-│  │  └─ tsconfig.json
-│  ├─ ts-config
-│  │  ├─ base.json
-│  │  ├─ nextjs.json
-│  │  ├─ package.json
-│  │  ├─ react-app.json
-│  │  ├─ react-library.json
-│  │  └─ server.json
-│  └─ ui
-│     ├─ components.json
-│     ├─ package.json
-│     ├─ postcss.config.mjs
-│     ├─ src
-│     │  ├─ components
-│     │  │  ├─ button.tsx
-│     │  │  ├─ card.tsx
-│     │  │  ├─ checkbox.tsx
-│     │  │  ├─ dropdown-menu.tsx
-│     │  │  ├─ input.tsx
-│     │  │  ├─ label.tsx
-│     │  │  ├─ skeleton.tsx
-│     │  │  └─ sonner.tsx
-│     │  ├─ hooks
-│     │  ├─ lib
-│     │  │  └─ utils.ts
-│     │  └─ styles
-│     │     └─ globals.css
-│     └─ tsconfig.json
-├─ pnpm-lock.yaml
-├─ pnpm-workspace.yaml
-└─ turbo.json
-
-```
