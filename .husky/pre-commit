@@ -1,1 +1,2 @@
+rm -rf ../apps/native/.gitignore
 lint-staged
