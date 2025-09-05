@@ -1,2 +1,11 @@
-rm -rf ./apps/native/.gitignore
-lint-staged
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Get the git root directory dynamically
+GIT_ROOT=$(git rev-parse --show-toplevel)
+
+# Remove the .gitignore in the native app folder relative to the git root
+rm -rf "$GIT_ROOT/apps/native/.gitignore"
+
+# Run lint-staged from the git root
+(cd "$GIT_ROOT" && npx lint-staged)
