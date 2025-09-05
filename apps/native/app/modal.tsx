@@ -1,5 +1,5 @@
+import { Container } from "@my-fullstack-setup/ui/components/native/container";
 import { Text, View } from "react-native";
-import { Container } from "@/components/container";
 
 export default function Modal() {
 	return (

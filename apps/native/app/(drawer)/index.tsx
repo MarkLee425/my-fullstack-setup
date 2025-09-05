@@ -1,6 +1,6 @@
+import { Container } from "@my-fullstack-setup/ui/components/native/container";
 import { useQuery } from "@tanstack/react-query";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Container } from "@/components/container";
 import { SignIn } from "@/components/sign-in";
 import { SignUp } from "@/components/sign-up";
 import { authClient } from "@/lib/auth-client";

@@ -1,5 +1,10 @@
+import { cssInterop } from "nativewind";
 import type React from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView as View } from "react-native";
+
+const SafeAreaView = cssInterop(View, {
+	className: "style",
+});
 
 export const Container = ({ children }: { children: React.ReactNode }) => {
 	return (
