@@ -4,5 +4,5 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 # Remove the .gitignore in the native app folder relative to the git root
 rm -rf "$GIT_ROOT/apps/native/.gitignore"
 
-# Run lint-staged from the git root
-(cd "$GIT_ROOT" && npx lint-staged)
+# lint-staged
+lint-staged
