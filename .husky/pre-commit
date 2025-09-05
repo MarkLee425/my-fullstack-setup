@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 # Get the git root directory dynamically
 GIT_ROOT=$(git rev-parse --show-toplevel)
 
