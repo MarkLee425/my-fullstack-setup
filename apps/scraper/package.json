@@ -1,0 +1,11 @@
+{
+	"name": "@my-fullstack-setup/scraper",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"dev": "uv run src/main.py",
+		"build": "uv build",
+		"start": "uv run src/main.py",
+		"clean": "rimraf dist .turbo node_modules"
+	}
+}

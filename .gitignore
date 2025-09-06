@@ -19,6 +19,9 @@ web-build/
 .open-next/
 # expo router
 expo-env.d.ts
+# python
+.venv
+**/*.egg-info
 
 
 
