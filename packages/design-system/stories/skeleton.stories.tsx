@@ -1,5 +1,6 @@
 import { Skeleton } from "@my-fullstack-setup/ui/components/skeleton";
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 
 /**
  * Use to show a placeholder while content is loading.

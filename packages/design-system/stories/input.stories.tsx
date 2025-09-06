@@ -2,6 +2,7 @@ import { Button } from "@my-fullstack-setup/ui/components/button";
 import { Input } from "@my-fullstack-setup/ui/components/input";
 import { Label } from "@my-fullstack-setup/ui/components/label";
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { expect, userEvent } from "storybook/test";
 
 /**

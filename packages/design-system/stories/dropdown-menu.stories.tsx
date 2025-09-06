@@ -17,6 +17,7 @@ import {
 } from "@my-fullstack-setup/ui/components/dropdown-menu";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Mail, Plus, PlusCircle, Search, UserPlus } from "lucide-react";
+import React from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 /**

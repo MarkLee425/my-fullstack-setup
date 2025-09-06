@@ -9,6 +9,7 @@ import {
 } from "@my-fullstack-setup/ui/components/card";
 import type { Meta, StoryObj } from "@storybook/react";
 import { BellRing } from "lucide-react";
+import React from "react";
 
 const notifications = [
 	{

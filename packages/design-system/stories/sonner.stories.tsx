@@ -1,6 +1,7 @@
 import { Button } from "@my-fullstack-setup/ui/components/button";
 import { Toaster } from "@my-fullstack-setup/ui/components/sonner";
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { toast } from "sonner";
 import { action } from "storybook/actions";
 import { expect, userEvent, waitFor, within } from "storybook/test";

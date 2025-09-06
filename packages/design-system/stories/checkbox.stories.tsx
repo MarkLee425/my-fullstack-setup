@@ -1,6 +1,7 @@
 import { Checkbox } from "@my-fullstack-setup/ui/components/checkbox";
 import { Label } from "@my-fullstack-setup/ui/components/label";
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 /**

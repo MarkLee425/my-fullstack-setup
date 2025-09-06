@@ -1,5 +1,6 @@
 import { Label } from "@my-fullstack-setup/ui/components/label";
 import type { Meta, StoryObj } from "@storybook/react";
+import React from "react";
 
 /**
  * Renders an accessible label associated with controls.

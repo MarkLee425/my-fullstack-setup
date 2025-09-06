@@ -1,6 +1,7 @@
 import { Button } from "@my-fullstack-setup/ui/components/button";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Loader2, Mail } from "lucide-react";
+import React from "react";
 
 /**
  * Displays a button or a component that looks like a button.
