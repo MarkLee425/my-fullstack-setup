@@ -4,4 +4,4 @@ services:
   scraper:
     build: .
     container_name: scraper
-    command: uv run main.py
+    command: python src/main.py
