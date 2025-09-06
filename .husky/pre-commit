@@ -4,5 +4,7 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 # Remove the .gitignore in the native app folder relative to the git root
 rm -rf "$GIT_ROOT/apps/native/.gitignore"
 
+git add .
+
 # lint-staged
 lint-staged
