@@ -6,6 +6,6 @@
 		"dev": "uv run src/main.py",
 		"build": "uv build",
 		"start": "uv run src/main.py",
-		"clean": "rimraf dist .turbo node_modules"
+		"clean": "rimraf dist .turbo node_modules dist scraper.egg-info"
 	}
 }
