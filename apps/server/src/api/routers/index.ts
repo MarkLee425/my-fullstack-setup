@@ -1,11 +1,11 @@
 import z from "zod";
-import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
+import { protectedProcedure, publicProcedure, router } from "../../lib/trpc";
 
 export const appRouter = router({
 	healthCheck: publicProcedure
 		.meta({ openapi: { method: "GET", path: "/health" } })
 		.input(z.void())
-		.output(z.string())
+		.output(z.literal("OK"))
 		.query(() => {
 			return "OK";
 		}),

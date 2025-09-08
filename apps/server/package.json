@@ -32,6 +32,7 @@
 		"@fastify/websocket": "^11.2.0",
 		"@my-fullstack-setup/constants": "workspace:*",
 		"@node-rs/argon2": "^2.0.2",
+		"@scalar/fastify-api-reference": "^1.34.6",
 		"@trpc/client": "^11.5.0",
 		"@trpc/server": "^11.5.0",
 		"amqplib": "^0.10.9",

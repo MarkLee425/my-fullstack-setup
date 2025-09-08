@@ -4,6 +4,7 @@ import {
 	MIN_PASSWORD_LENGTH,
 } from "@my-fullstack-setup/constants";
 import { betterAuth } from "better-auth";
+import { openAPI } from "better-auth/plugins";
 import {
 	sendDeleteAccountVerificationEmail,
 	sendResetPasswordEmail,
@@ -225,5 +226,17 @@ export const auth = betterAuth({
 			httpOnly: true,
 		},
 	},
-	plugins: [expo()],
+	plugins: [
+		expo(),
+		...(config.APP_ENV === "production"
+			? []
+			: [
+					openAPI(),
+					// captcha({
+					// 	provider: 'cloudflare-turnstile',
+					// 	secretKey: config.TURNSTILE_SECRET_KEY,
+					// 	endpoints: ['/sign-up/email', '/sign-in/email', '/forget-password', '/sign-in/social'],
+					// }),
+				]),
+	],
 });

@@ -4,11 +4,12 @@ import {
 } from "@trpc/server/adapters/fastify";
 import Fastify from "fastify";
 import { fastifyTRPCOpenApiPlugin } from "trpc-to-openapi";
+import { openApiDocument } from "./api/openapi";
+import { type AppRouter, appRouter } from "./api/routers";
 import { auth } from "./lib/auth";
 import config from "./lib/config";
 import { createContext } from "./lib/context";
 import { startRedis, stopRedis } from "./lib/redis";
-import { type AppRouter, appRouter } from "./routers";
 
 const trpcCorsOptions = {
 	origin: [config.CLIENT_URL, config.NATIVE_WEB_URL, config.NATIVE_APP_URL],
@@ -160,6 +161,18 @@ async function buildServer() {
 
 	// OpenAPI
 	await fastify.register(fastifyTRPCOpenApiPlugin, { router: appRouter });
+
+	fastify.get("/open-api", () => openApiDocument);
+
+	await fastify.register(import("@scalar/fastify-api-reference"), {
+		routePrefix: "/reference",
+		logLevel: "silent",
+		configuration: {
+			title: "my-fullstack-setup API Reference",
+			url: "/open-api",
+			persistAuth: true,
+		},
+	});
 
 	// Health check
 	fastify.get("/", async () => "OK");
