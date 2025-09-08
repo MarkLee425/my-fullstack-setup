@@ -8,8 +8,8 @@ import { openApiDocument } from "./api/openapi";
 import { type AppRouter, appRouter } from "./api/routers";
 import { auth } from "./lib/auth";
 import config from "./lib/config";
-import { createContext } from "./lib/context";
 import { startRedis, stopRedis } from "./lib/redis";
+import { createContext } from "./lib/trpc/context";
 
 const trpcCorsOptions = {
 	origin: [config.CLIENT_URL, config.NATIVE_WEB_URL, config.NATIVE_APP_URL],

@@ -44,6 +44,7 @@
 		"nodemailer": "^7.0.6",
 		"postgres": "^3.4.7",
 		"redis": "^5.8.2",
+		"sharp": "^0.34.3",
 		"superjson": "^2.2.2",
 		"trpc-to-openapi": "^3.0.1",
 		"validator": "^13.15.15",
