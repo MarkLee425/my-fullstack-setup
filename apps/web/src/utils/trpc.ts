@@ -3,7 +3,7 @@ import { createTRPCClient, httpBatchLink, httpLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { toast } from "sonner";
 import superjson from "superjson";
-import type { AppRouter } from "../../../server/src/routers";
+import type { AppRouter } from "../../../server/src/api/routers";
 
 export const queryClient = new QueryClient({
 	queryCache: new QueryCache({

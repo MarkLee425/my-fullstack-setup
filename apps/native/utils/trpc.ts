@@ -3,7 +3,7 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import superjson from "superjson";
 import { authClient } from "@/lib/auth-client";
-import type { AppRouter } from "../../server/src/routers";
+import type { AppRouter } from "../../server/src/api/routers";
 
 export const queryClient = new QueryClient();
 
