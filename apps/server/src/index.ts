@@ -49,7 +49,6 @@ const fastify = Fastify({
 	trustProxy: 1,
 });
 
-// ✅ log like your Morgan setup
 fastify.addHook("onResponse", (req, reply, done) => {
 	const logData = {
 		requestId: req.id,
@@ -97,12 +96,10 @@ async function buildServer() {
 				: false,
 	});
 
-	// Cookies
 	await fastify.register(import("@fastify/cookie"), {
 		secret: config.COOKIES_SIGNATURE,
 		parseOptions: {},
 	});
-
 	await fastify.register(import("@fastify/websocket"));
 	await fastify.register(import("@fastify/cors"), trpcCorsOptions);
 	await fastify.register(import("@fastify/multipart"), {
@@ -173,9 +170,6 @@ async function buildServer() {
 			persistAuth: true,
 		},
 	});
-
-	// Health check
-	fastify.get("/", async () => "OK");
 
 	return fastify;
 }
