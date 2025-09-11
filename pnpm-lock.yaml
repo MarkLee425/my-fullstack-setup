@@ -294,9 +294,15 @@ importers:
       react-dom:
         specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
+      react-helmet-async:
+        specifier: ^2.0.5
+        version: 2.0.5(react@19.1.1)
       react-router:
         specifier: ^7.8.2
         version: 7.8.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      schema-dts:
+        specifier: ^1.1.5
+        version: 1.1.5
       sonner:
         specifier: ^2.0.5
         version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -6343,6 +6349,11 @@ packages:
     peerDependencies:
       react: '>=17.0.0'
 
+  react-helmet-async@2.0.5:
+    resolution: {integrity: sha512-rYUYHeus+i27MvFE+Jaa4WsyBKGkL6qVgbJvSBoX8mbsWoABJXdEO0bZyi0F6i+4f0NuIb8AvqPMj3iXFHkMwg==}
+    peerDependencies:
+      react: ^16.6.0 || ^17.0.0 || ^18.0.0
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -6698,6 +6709,9 @@ packages:
 
   scheduler@0.26.0:
     resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
+
+  schema-dts@1.1.5:
+    resolution: {integrity: sha512-RJr9EaCmsLzBX2NDiO5Z3ux2BVosNZN5jo0gWgsyKvxKIUL5R3swNvoorulAeL9kLB0iTSX7V6aokhla2m7xbg==}
 
   secure-json-parse@4.0.0:
     resolution: {integrity: sha512-dxtLJO6sc35jWidmLxo7ij+Eg48PM/kleBsxpC8QJE0qJICe+KawkDQmvCMZUr9u7WKVHgMW6vy3fQ7zMiFZMA==}
@@ -14468,6 +14482,13 @@ snapshots:
     dependencies:
       react: 19.1.1
 
+  react-helmet-async@2.0.5(react@19.1.1):
+    dependencies:
+      invariant: 2.2.4
+      react: 19.1.1
+      react-fast-compare: 3.2.2
+      shallowequal: 1.1.0
+
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
@@ -14899,6 +14920,8 @@ snapshots:
   scheduler@0.25.0: {}
 
   scheduler@0.26.0: {}
+
+  schema-dts@1.1.5: {}
 
   secure-json-parse@4.0.0: {}
 
