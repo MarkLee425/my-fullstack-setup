@@ -31,7 +31,7 @@ expo-env.d.ts
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-.vscode/*
+**/mcp.json
 !.vscode/launch.json
 !.vscode/*.code-snippets
 .idea/workspace.xml
