@@ -1,13 +1,13 @@
 {
 	"name": "my-fullstack-setup",
 	"private": true,
-	"packageManager": "pnpm@10.15.1",
+	"packageManager": "pnpm@10.17.0",
 	"scripts": {
 		"check": "biome check --write .",
 		"prepare": "husky",
 		"dev": "turbo dev",
 		"build": "turbo build",
-		"clean": "turbo clean && rimraf .turbo node_modules pnpm-lock.yaml",
+		"clean": "turbo clean && rimraf .turbo node_modules pnpm-lock.yaml .idea",
 		"format": "biome format . --write",
 		"check-types": "turbo check-types",
 		"dev:native": "turbo -F native dev",

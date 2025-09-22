@@ -22,8 +22,7 @@ expo-env.d.ts
 # python
 .venv
 **/*.egg-info
-
-
+.idea
 
 # dev
 .yarn/
