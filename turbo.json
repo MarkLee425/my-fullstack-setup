@@ -25,6 +25,50 @@
 		"lint": {
 			"dependsOn": ["^lint"]
 		},
+		"db:migrate": {
+			"dependsOn": ["^db:migrate"],
+			"cache": false
+		},
+		"db:migrate:full": {
+			"dependsOn": ["^db:migrate:full"],
+			"cache": false
+		},
+		"db:migrate:up": {
+			"dependsOn": ["^db:migrate:up"],
+			"cache": false
+		},
+		"db:migrate:down": {
+			"dependsOn": ["^db:migrate:down"],
+			"cache": false
+		},
+		"db:migrate:down:all": {
+			"dependsOn": ["^db:migrate:down:all"],
+			"cache": false
+		},
+		"db:migrate:down:full": {
+			"dependsOn": ["^db:migrate:down:full"],
+			"cache": false
+		},
+		"db:up": {
+			"dependsOn": ["^db:up"],
+			"cache": false
+		},
+		"db:down": {
+			"dependsOn": ["^db:down"],
+			"cache": false
+		},
+		"redis:up": {
+			"dependsOn": ["^redis:up"],
+			"cache": false
+		},
+		"redis:down": {
+			"dependsOn": ["^redis:down"],
+			"cache": false
+		},
+		"setup:all": {
+			"dependsOn": ["^setup:all"],
+			"cache": false
+		},
 		"encrypt:all": {
 			"dependsOn": ["^encrypt:all"],
 			"cache": false

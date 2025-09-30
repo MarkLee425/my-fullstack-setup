@@ -2,15 +2,6 @@
 
 A modern, monorepo fullstack application setup with TypeScript, React, React Native (Expo), Fastify, and PostgreSQL.
 
-## Architecture
-
-This project is structured as a monorepo with the following components:
-
-- **Web**: React 19 application with Vite, React Router v7, and Tailwind CSS
-- **Native**: Expo (React Native) application for iOS and Android with NativeWind
-- **Server**: Fastify backend with PostgreSQL and Redis
-- **Packages**: Shared constants and UI components
-
 ### Tech Stack
 
 | Layer    | Technology               | Purpose                          |
@@ -32,7 +23,7 @@ This project is structured as a monorepo with the following components:
 - pnpm (v8 or higher)
 - Docker (for database and cache services)
 
-### Installation
+### First-Time Setup
 
 1. Clone the repository:
 ```bash
@@ -40,41 +31,28 @@ git clone <repository-url>
 cd my-fullstack-setup
 ```
 
-2. Install dependencies:
+2. Run the initialization script (this handles dependencies, environment setup, and project configuration):
 ```bash
-pnpm install
+sh scripts/init.sh
 ```
 
-3. Set up environment variables:
+3. Run database migrations:
 ```bash
-# Copy the example env file from the server directory
-cp apps/server/.env.example .env.docker
-# Edit with your values
+cd apps/server && pnpm db:migrate:full && cd ../..
 ```
 
-4. Initialize the development environment:
+4. Start development:
 ```bash
-pnpm run setup
+pnpm dev
 ```
 
-This will:
-- Start PostgreSQL and Redis containers
-- Run database migrations
-- Set up all required services
-
-### Development
-
-Start all services in development mode:
-
-```bash
-# Start all apps (web, native, server)
-pnpm run dev
-
-# Or start individual apps:
-pnpm run dev:web      # Next.js web app
-pnpm run dev:native   # Expo mobile app
-pnpm run dev:server   # Fastify server
-```
+The initialization script will:
+- Install all dependencies with pnpm
+- Create new key for encryption & decryption
+- Decrypt and set up environment files
+- Docker compose up all services except server
+- Configure .gitignore settings
+- Set up the project structure
 
 ### Database Management
 
@@ -93,14 +71,23 @@ pnpm run db:migrate:full  # Reset and run all migrations
 ```
 my-fullstack-setup/
 ├── apps/
-│   ├── native/       # Expo React Native app
-│   ├── server/       # Fastify backend server
-│   └── web/          # React + Vite web application
+│   ├── native/           # Expo React Native app
+│   ├── scraper/          # Python web scraper service
+│   ├── server/           # Fastify backend server
+│   └── web/              # React + Vite web application
 ├── packages/
-│   ├── constants/    # Shared constants and types
-│   └── ui/           # Shared UI components
-├── .env.docker       # Docker environment configuration (copied from apps/server/.env.example)
-└── turbo.json        # Turborepo configuration
+│   ├── constants/        # Shared constants and types
+│   ├── design-system/    # Design system components and tokens
+│   ├── ts-config/        # Shared TypeScript configurations
+│   └── ui/               # Shared UI components
+├── scripts/
+│   └── init.sh           # First-time setup script
+├── .env.keys             # Environment asymmetric private keys
+├── .github/              # GitHub workflows, copilot and configurations
+├── .vscode/              # VS Code workspace settings
+├── biome.json            # Biome linter and formatter config
+├── turbo.json            # Turborepo configuration
+└── pnpm-workspace.yaml   # Pnpm workspace configuration
 ```
 
 ## Available Scripts

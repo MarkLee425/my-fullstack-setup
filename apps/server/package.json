@@ -17,7 +17,7 @@
 		"db:down": "docker-compose -f ./docker-compose-dev.yml down db",
 		"redis:up": "docker-compose -f ./docker-compose-dev.yml up -d redis",
 		"redis:down": "docker-compose -f ./docker-compose-dev.yml down redis",
-		"setup": "pnpm run db:down && pnpm run redis:down && pnpm run db:up && pnpm run redis:up && pnpm run db:migrate:up",
+		"setup:all": "pnpm run db:down && pnpm run redis:down && pnpm run db:up && pnpm run redis:up",
 		"encrypt:all": "dotenvx encrypt -fk ../../.env.keys -f .env -f .env.docker",
 		"decrypt:all": "dotenvx decrypt -fk ../../.env.keys -f .env -f .env.docker"
 	},

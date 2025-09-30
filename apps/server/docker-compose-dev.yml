@@ -5,23 +5,24 @@ networks:
     driver: bridge
 
 services:
-  server:
-    build:
-      context: ../..
-      dockerfile: ./apps/server/Dockerfile
-    container_name: my-fullstack-setup-server
-    restart: always
-    ports:
-      - '${SERVER_PORT}:8015'
-    env_file:
-      - .env.docker
-    depends_on:
-      - db
-      - redis
-    networks:
-      - internal-network
+  # server:
+  #   build:
+  #     context: ../..
+  #     dockerfile: ./apps/server/Dockerfile
+  #   container_name: my-fullstack-setup-server
+  #   restart: always
+  #   ports:
+  #     - '${SERVER_PORT}:8015'
+  #   env_file:
+  #     - .env.docker
+  #   depends_on:
+  #     - db
+  #     - redis
+  #   networks:
+  #     - internal-network
   db:
-    image: postgres:17.5-alpine
+    image: postgis/postgis:17-3.6-alpine
+    platform: linux/amd64 # Change if you are using a different platform
     container_name: my-fullstack-setup-postgres
     restart: always
     shm_size: 128mb
@@ -31,10 +32,11 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-      TZ: 'UTC'
-      PGTZ: 'UTC'
+      TZ: "UTC"
+      PGTZ: "UTC"
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - '${DB_PORT}:5432'
+      - "${DB_PORT}:5432"
     volumes:
       - my-fullstack-setup_postgres_data:/var/lib/postgres/data
     healthcheck:
@@ -52,11 +54,11 @@ services:
     env_file:
       - .env.docker
     ports:
-      - '${REDIS_APP_PORT}:6379'
+      - "${REDIS_APP_PORT}:6379"
     volumes:
       - my-fullstack-setup_redis_data:/var/lib/redis/data
     healthcheck:
-      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 5s
       timeout: 5s
       retries: 10

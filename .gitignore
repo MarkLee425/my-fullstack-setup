@@ -24,6 +24,8 @@ expo-env.d.ts
 **/*.egg-info
 .idea
 
+
+
 # dev
 .yarn/
 !.yarn/patches
@@ -48,8 +50,7 @@ node_modules/
 .pnp.*
 
 # env
-# This should be uncommented once you started using it
-# .env.keys 
+
 .dev.vars
 
 .cache
