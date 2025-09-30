@@ -2,11 +2,30 @@
 GIT_ROOT=$(git rev-parse --show-toplevel)
 
 # Remove the .gitignore in the native app folder relative to the git root
-rm -rf "$GIT_ROOT/apps/native/.gitignore"
+# Get the git root directory dynamically
+GIT_ROOT=$(git rev-parse --show-toplevel)
+TARGET="$GIT_ROOT/apps/native/.gitignore"
 
-pnpm encrypt:all
+# If the file exists on disk
+if [ -f "$TARGET" ]; then
+  echo "🗑️ Removing $TARGET"
+  rm -f "$TARGET"
+fi
 
-git add .
+# If the file is tracked by git, stage its removal
+if git ls-files --error-unmatch "$TARGET" > /dev/null 2>&1; then
+  git rm --cached "$TARGET"
+  echo "✅ Staged removal of $TARGET"
+else
+  echo "ℹ️ $TARGET not tracked by git, nothing to stage"
+fi
+
+#pnpm encrypt:all
+
+git add "$GIT_ROOT/apps/native/.env"
+git add "$GIT_ROOT/apps/server/.env"
+git add "$GIT_ROOT/apps/server/.env.docker"
+git add "$GIT_ROOT/apps/web/.env"
 
 # lint-staged
 lint-staged
