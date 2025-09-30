@@ -228,10 +228,10 @@ export const auth = betterAuth({
 	},
 	plugins: [
 		expo(),
+		openAPI(),
 		...(config.APP_ENV === "production"
 			? []
 			: [
-					openAPI(),
 					// captcha({
 					// 	provider: 'cloudflare-turnstile',
 					// 	secretKey: config.TURNSTILE_SECRET_KEY,

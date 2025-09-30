@@ -48,9 +48,8 @@ node_modules/
 .pnp.*
 
 # env
-.env*
-.env.production
-!.env.example
+# This should be uncommented once you started using it
+# .env.keys 
 .dev.vars
 
 .cache

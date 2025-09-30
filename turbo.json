@@ -2,6 +2,16 @@
 	"$schema": "https://turbo.build/schema.json",
 	"ui": "tui",
 	"tasks": {
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"check-types": {
+			"dependsOn": ["^check-types"]
+		},
+		"clean": {
+			"cache": false
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -15,14 +25,12 @@
 		"lint": {
 			"dependsOn": ["^lint"]
 		},
-		"check-types": {
-			"dependsOn": ["^check-types"]
+		"encrypt:all": {
+			"dependsOn": ["^encrypt:all"],
+			"cache": false
 		},
-		"dev": {
-			"cache": false,
-			"persistent": true
-		},
-		"clean": {
+		"decrypt:all": {
+			"dependsOn": ["^decrypt:all"],
 			"cache": false
 		}
 	}

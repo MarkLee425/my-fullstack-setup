@@ -22,7 +22,13 @@
 		"db:down": "turbo -F server db:down",
 		"redis:up": "turbo -F server redis:up",
 		"redis:down": "turbo -F server redis:down",
-		"setup": "turbo -F server setup"
+		"setup": "turbo -F server setup",
+		"encrypt:all": "turbo -F @my-fullstack-setup/server -F @my-fullstack-setup/web -F @my-fullstack-setup/native encrypt:all",
+		"decrypt:all": "turbo -F @my-fullstack-setup/server -F @my-fullstack-setup/web -F @my-fullstack-setup/native decrypt:all",
+		"decrypt": "dotenvx decrypt -fk ./.env.keys"
+	},
+	"dependencies": {
+		"@dotenvx/dotenvx": "^1.51.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.0",

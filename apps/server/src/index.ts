@@ -69,29 +69,43 @@ async function buildServer() {
 
 	// Security headers
 	await fastify.register(import("@fastify/helmet"), {
+		// Content Security Policy
 		contentSecurityPolicy:
 			config.APP_ENV === "production"
 				? {
 						directives: {
-							defaultSrc: ["'self'"],
+							defaultSrc: ["'self'"], // Only allow same origin
 							scriptSrc: [
 								"'self'",
 								"'unsafe-inline'",
 								"trusted.cdn.example.com",
-							],
-							styleSrc: ["'self'", "'unsafe-inline'"],
-							imgSrc: ["'self'", "data:", "cdn.example.com"],
+							], // Trusted scripts
+							styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for framework styling
+							imgSrc: ["'self'", "data:", "cdn.example.com"], // Images from self, data URI, or CDN
+							connectSrc: ["'self'", config.CLIENT_URL, config.NATIVE_WEB_URL], // APIs you allow
+							fontSrc: ["'self'", "fonts.gstatic.com"], // Fonts
+							objectSrc: ["'none'"], // No plugins
+							upgradeInsecureRequests: [], // Upgrade HTTP to HTTPS
 						},
 					}
-				: false,
-		crossOriginResourcePolicy: false,
-		dnsPrefetchControl: false,
+				: false, // Disable in development to simplify debugging
+
+		// Other headers
+		dnsPrefetchControl: false, // Disable prefetch
+		noSniff: true, // Prevent MIME-type sniffing
+		referrerPolicy: { policy: "no-referrer" }, // Hide referrer
+		xssFilter: true, // XSS filter for old browsers
+		frameguard: { action: "sameorigin" }, // Prevent clickjacking
+		ieNoOpen: true, // Prevent opening downloads in IE
+		xPoweredBy: false, // Hide Fastify
+
+		// HSTS
 		hsts:
 			config.PROTOCOL === "https"
 				? {
-						maxAge: 180 * 24 * 60 * 60,
-						includeSubDomains: false,
-						preload: false,
+						maxAge: 31536000, // 1 year
+						includeSubDomains: true,
+						preload: true, // Allow inclusion in browser preload list
 					}
 				: false,
 	});
@@ -159,7 +173,69 @@ async function buildServer() {
 	// OpenAPI
 	await fastify.register(fastifyTRPCOpenApiPlugin, { router: appRouter });
 
-	fastify.get("/open-api", () => openApiDocument);
+	fastify.get("/open-api", async () => {
+		const authOpenApi = await auth.api.generateOpenAPISchema();
+
+		const authPathsWithTag = Object.fromEntries(
+			Object.entries(authOpenApi.paths).map(([pathKey, pathValue]) => {
+				const updatedMethods = Object.fromEntries(
+					Object.entries(pathValue).map(([method, operation]) => [
+						method,
+						{
+							...operation,
+							tags: operation.tags || [],
+						},
+					]),
+				);
+				return [pathKey, updatedMethods];
+			}),
+		);
+
+		// 2️⃣ Merge paths
+		const combinedPaths = { ...openApiDocument.paths, ...authPathsWithTag };
+
+		// 3️⃣ Merge components
+		const combinedComponents = {
+			...openApiDocument.components,
+			...authOpenApi.components,
+		};
+
+		const authTagsSet = new Set<string>();
+		Object.values(authPathsWithTag).forEach((pathItem) => {
+			Object.values(pathItem).forEach((op: any) => {
+				(op.tags || []).forEach((tag: string) => authTagsSet.add(tag));
+			});
+		});
+		const authTags = Array.from(authTagsSet);
+
+		const generalTagsSet = new Set<string>();
+		Object.values(openApiDocument.paths!).forEach((pathItem) => {
+			Object.values(pathItem).forEach((op: any) => {
+				(op.tags || []).forEach((tag: string) => {
+					if (!authTagsSet.has(tag)) generalTagsSet.add(tag);
+				});
+			});
+		});
+		const generalTags = Array.from(generalTagsSet);
+
+		const xTagGroups = [
+			{
+				name: "Auth",
+				tags: authTags,
+			},
+			{
+				name: "General",
+				tags: generalTags,
+			},
+		];
+
+		return {
+			...openApiDocument,
+			paths: combinedPaths,
+			components: combinedComponents,
+			"x-tagGroups": xTagGroups,
+		};
+	});
 
 	await fastify.register(import("@scalar/fastify-api-reference"), {
 		routePrefix: "/reference",
@@ -169,6 +245,14 @@ async function buildServer() {
 			url: "/open-api",
 			persistAuth: true,
 		},
+	});
+
+	// Disable Better Auth OpenAPI Route & Redirect to "/reference" to handle all
+	fastify.get("/auth/reference", async (_, reply) => {
+		reply.redirect("/reference");
+	});
+	fastify.get("/auth/reference/*", async (_, reply) => {
+		reply.redirect("/reference");
 	});
 
 	return fastify;
@@ -186,7 +270,7 @@ async function main() {
 	});
 
 	// Graceful shutdown
-	const shutdown = async (signal: string) => {
+	const shutdown = async (signal: NodeJS.Signals) => {
 		app.log.info(`Received shutdown signal: ${signal}`);
 		try {
 			await stopRedis();

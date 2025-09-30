@@ -9,8 +9,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "../global.css";
+import { PortalHost } from "@rn-primitives/portal";
 import React, { useRef } from "react";
 import { Platform } from "react-native";
+import { Toaster } from "sonner-native";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
 import { NAV_THEME } from "@/lib/constants";
 import { useColorScheme } from "@/lib/use-color-scheme";
@@ -53,16 +55,14 @@ export default function RootLayout() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-				<StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+				<StatusBar backgroundColor="#4DC4FF" style="dark" translucent={false} />
 				<GestureHandlerRootView style={{ flex: 1 }}>
-					<Stack>
-						<Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-						<Stack.Screen
-							name="modal"
-							options={{ title: "Modal", presentation: "modal" }}
-						/>
+					<Stack screenOptions={{ headerShown: false }}>
+						<Stack.Screen name="(drawer)" options={{ title: "Drawer" }} />
 					</Stack>
+					<Toaster position="bottom-center" />
 				</GestureHandlerRootView>
+				<PortalHost />
 			</ThemeProvider>
 		</QueryClientProvider>
 	);
